@@ -1,2 +1,3 @@
 *.yaml
-
+.*DS_Store
+*.pyc
