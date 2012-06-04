@@ -95,7 +95,11 @@
               {% for e in estimaciones %}
               <tr>
                 <td>{{ e[1] }}</td>
+                {% if e[0]==-1 %}
                 <td>{{ e[0] }} minutos</td>
+                {% else %}
+                <td>Pasando ahora mismo</td>
+                {% endif %}
               </tr>              
               {% endfor %}
             </tbody>
