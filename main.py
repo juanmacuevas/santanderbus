@@ -93,8 +93,10 @@ class StopHandler(webapp2.RequestHandler):
         #print dom1.toprettyxml()
         est = []
         for l in dom1.getElementsByTagName('linea'):
-           for e in l.parentNode.getElementsByTagName('minutos'):
-              est.append([int(e.childNodes[0].data),l.childNodes[0].data])
+            for e in l.parentNode.getElementsByTagName('minutos'):
+                minutos = int(e.childNodes[0].data)
+                if minutos>=0:
+                    est.append([minutos,l.childNodes[0].data])
 
         est = sorted(est)
         #print "parada "+str(parada)

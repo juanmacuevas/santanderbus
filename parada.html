@@ -3,7 +3,7 @@
 <html lang="es">
   <head>
     <meta charset="utf-8">
-    <title>Parada 28</title>
+    <title>{{name_stop}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -69,7 +69,7 @@
         <div class="span6 offset1">
           <div class="well">
           <h1>{{name_stop}}</h1>
-          <h2>Parada {{id_stop}}</h2>
+          <h2><small>Parada {{id_stop}}</small></h2>
           <!-- <h1>Bootstrap starter template</h1> -->
           <p>Descubre cuál es el siguiente bus que pasará por esta parada.</p>
           <a class="btn" href="javascript:location.reload()"><i class="icon-refresh"></i> Actualizar</a>
@@ -95,11 +95,9 @@
               {% for e in estimaciones %}
               <tr>
                 <td>{{ e[1] }}</td>
-                {% if e[0]>= 0 %}
+               
                 <td>{{ e[0] }} minutos</td>
-                {% else %}
-                <td>Pasando ahora mismo</td>
-                {% endif %}
+               
               </tr>              
               {% endfor %}
             </tbody>
