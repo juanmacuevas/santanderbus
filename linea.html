@@ -76,10 +76,10 @@
         </div>
         {% for r in rutas %}
         <div class="span4"> 
-            <h1>{{ r[0] }}</h1>
             <ul class="nav nav-tabs nav-stacked">
+              <li class="nav-header"><h2><small>Destino</small> {{ r[0] }}</h2></li>
               {% for l in r[1] %}
-              <li><a href="/parada/{{ l[0] }}">{{ l[0] }} - {{ l[1] }}</a></li>
+              <li><a href="/parada/{{ l[0] }}"><h3>{{ l[0] }} <small> {{ l[1] }}</small></h3></a></li>
               {% endfor %}
             </ul>
         </div>

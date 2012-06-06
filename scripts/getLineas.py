@@ -38,15 +38,15 @@ the_page = response.read()
 
 dom1 = parseString(the_page)
 #print dom1.toprettyxml()
-est = []
+lineas = []
 for l in dom1.getElementsByTagName('InfoLinea'):
-    print l[0].getElementsByTagName('nombre').childNodes[0].data#childNodes[0].data
-    print l[0].getElementsByTagName('label').childNodes[0].data
+    lineas.append([l.getElementsByTagName('nombre')[0].childNodes[0].data,
+        l.getElementsByTagName('label')[0].childNodes[0].data])
+
+print lineas
 
 
-est = sorted(est)
-print "parada "+str(parada)
-print est
+
 
 
 

@@ -1,22 +1,21 @@
-
 <!DOCTYPE html>
 <html lang="es">
   <head>
+    {% block head %}
     <meta charset="utf-8">
-    <title>Santander Bus</title>
+    <title>{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Información red de autobuses de Santander, España">
+    <meta name="author" content="juanmacuevas">
 
     <!-- Le styles -->
     <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
     </style>
-    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
-
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -24,11 +23,6 @@
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
-
     <script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-32375037-1']);
@@ -39,63 +33,31 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
     </script>
+    {% endblock %}
+  </head>
 
 
-</head>
-
-  <body><br>
-<!--     <div class="navbar navbar-fixed-bottom">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">Santanderbus.tk</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li class="active" ><a href="#">Lineas</a></li>
-              <li><a href="#precios">Precios</a></li>
-              <li><a href="#noticias">Noticias</a></li>
-            </ul>
-          </div> --><!--/.nav-collapse -->
- <!--        </div>
-      </div>
-    </div> -->
+<body>
+    <br>
+{% block navbar %}{% endblock %}
+{% block breadcrumb %}{% endblock %}
 
     <div class="container">
-      <div class="row">
-        <div class="span5">
-          <div class="well">
-          <h1>Santander</h1>
-          <h2><small>Líneas de Bus</small></h2>
-          <!-- <h1>Bootstrap starter template</h1> -->
-          <p>Selecciona una línea para ver la lista de paradas.</p>
-          </div>
-          </div>
-          <div class="span5"> 
-            <ul class="nav nav-tabs nav-stacked">
-              {% for l in lineas %}
-              <li><a href="/linea/{{ l[1] }}"><h3>Linea {{ l[1] }} <small> {{ l[0] }}</small></h3></a></li>
-              {% endfor %}
-            </ul>
-          </div>
-      </div>
+        {% block content %}{% endblock %}
       <hr>
       <footer class="footer">
-        
+        {% block footer %}
         <p>Santander Bus es un proyecto <strong>no oficial</strong>. Si te gusta o tienes algún comentario, por favor escríbenos a través de twitter <a href="https://twitter.com/intent/tweet?screen_name=santanderbus">@santanderbus</a></p>
+        {% endblock %}
       </footer>
 
     </div> <!-- /container -->
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    {% block javascript %}
+    <!-- Javascripts. Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-        <!--[if IE]><script type="text/javascript" src="/static/js/excanvas.js"></script><![endif]-->
-    <script src="/static/js/coolclock.js"></script>
+    <!--[if IE]><script type="text/javascript" src="/static/js/excanvas.js"></script><![endif]-->
+    
     <script src="/static/js/moreskins.js"></script>
     <script src="/static/js/bootstrap-alert.js"></script>
     <script src="/static/js/bootstrap-transition.js"></script>
@@ -109,7 +71,7 @@
     <script src="/static/js/bootstrap-collapse.js"></script>
     <script src="/static/js/bootstrap-carousel.js"></script>
     <script src="/static/js/bootstrap-typeahead.js"></script>
-
+    {% endblock %}
 
   </body>
 </html>
