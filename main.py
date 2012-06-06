@@ -19,6 +19,7 @@ import jinja2
 import os
 import paradas
 import urllib2
+from urllib2 import Request, urlopen, URLError, HTTPError
 import sys  
 from xml.dom.minidom import parse, parseString
 from time import time
@@ -180,6 +181,11 @@ class LineHandler(webapp2.RequestHandler):
                 return   
         
         rutas = self.getLine(id)
+        if  not rutas:
+            self.error(404)
+            self.response.out.write('<html><head><title>404 Not Found</title> </head> <body>  <h1>404 Not Found</h1>  The resource could not be found.<br /><br /> </body></html>')
+            return
+
         template_values = {
             'rutas':rutas  ,
             'linea' : id 
@@ -219,8 +225,12 @@ class LineHandler(webapp2.RequestHandler):
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.52 Safari/536.5'
         }
         req = urllib2.Request(url, data, headers)
-
-        response = urllib2.urlopen(req)
+        try:
+                response = urllib2.urlopen(req)
+        except HTTPError, e:
+                self.error(404)
+                self.response.out.write('<html><head><title>404 Not Found</title> </head> <body>  <h1>404 Not Found</h1>  The resource could not be found.<br /><br /> </body></html>')
+                return
         the_page = response.read()
 
 
