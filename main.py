@@ -22,6 +22,8 @@ import urllib2
 import sys  
 from xml.dom.minidom import parse, parseString
 from time import time
+from google.appengine.api import memcache
+
 
 
 jinja_environment = jinja2.Environment(
@@ -31,17 +33,23 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         #self.response.out.write('SantanderBus')
         t1 = time()
+        lineas_render = memcache.get("lineas")
+        if lineas_render is not None:
+                t2 = time()
+                tt="<!--"+str(t2-t1)+" -->"
+                self.response.out.write(lineas_render+tt)
+                return       
         lineas = self.getLineas()
-        t2 = time()        
-
         template_values = {
             'lineas' :   lineas,
-            'time': str(t2-t1)[:5]     
         }
-
         template = jinja_environment.get_template('lineas.html')
-
-        self.response.out.write(template.render(template_values))
+        lineas_render = template.render(template_values)
+        if not memcache.set("lineas", lineas_render):
+                logging.error("Memcache set failed.") 
+        t2 =time()
+        tt="<!--"+str(t2-t1)+" -->"              
+        self.response.out.write(lineas_render+tt)
 
     def getLineas(self):
         url = 'http://www.ayto-santander.es:9001/services/estructura.asmx'

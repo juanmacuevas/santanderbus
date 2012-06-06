@@ -72,38 +72,20 @@
           <h2><small>Líneas de Bus</small></h2>
           <!-- <h1>Bootstrap starter template</h1> -->
           <p>Selecciona una línea para ver la lista de paradas.</p>
-          
           </div>
-  
           </div>
-          <div class="span5">     
-          
-          
+          <div class="span5"> 
             <ul class="nav nav-tabs nav-stacked">
-              
               {% for l in lineas %}
               <li><a href="/linea/{{ l[1] }}">{{ l[1] }} - {{ l[0] }}</a></li>
               {% endfor %}
-              
             </ul>
-
-
-
-
           </div>
-
-          
-
       </div>
-    <!--   <div class="row-fluid">
-        <p>Santander Bus es un proyecto <strong>no oficial</strong>. Si te gusta o tienes algún comentario, por favor escríbenos a través de twitter <a href="https://twitter.com/intent/tweet?screen_name=santanderbus">@santanderbus</a>.<br><small>Página generada en {{time}} segundos</small></p>
-      </div> -->
-      <!-- Footer
-      ================================================== -->
       <hr>
       <footer class="footer">
         
-        <p>Santander Bus es un proyecto <strong>no oficial</strong>. Si te gusta o tienes algún comentario, por favor escríbenos a través de twitter <a href="https://twitter.com/intent/tweet?screen_name=santanderbus">@santanderbus</a>.<br><small>Página generada en {{time}} segundos</small></p>
+        <p>Santander Bus es un proyecto <strong>no oficial</strong>. Si te gusta o tienes algún comentario, por favor escríbenos a través de twitter <a href="https://twitter.com/intent/tweet?screen_name=santanderbus">@santanderbus</a></p>
       </footer>
 
     </div> <!-- /container -->
