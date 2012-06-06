@@ -3,15 +3,14 @@
 
 {% block content %}
       <div class="row">
-        <div class="span5">
+        <div class="span4">
           <div class="well">
-          <h1>Santander</h1>
-          <h2><small>Líneas de Bus</small></h2>
+          <h1>Líneas de Bus <small>SANTANDER</small></h1>
           <!-- <h1>Bootstrap starter template</h1> -->
           <p>Selecciona una línea para ver la lista de paradas.</p>
           </div>
           </div>
-          <div class="span5"> 
+          <div class="span6"> 
             <ul class="nav nav-tabs nav-stacked">
               {% for l in lineas %}
               <li><a href="/linea/{{ l[1] }}"><h3>Linea {{ l[1] }} <small> {{ l[0] }}</small></h3></a></li>
