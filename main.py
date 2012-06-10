@@ -94,7 +94,10 @@ class StopHandler(webapp2.RequestHandler):
     def get(self,id):
     	# n = self.request.get('n')
         #self.response.out.write("La parada solicitada es "+paradas.nodos[28]['nombre'])
-
+        if not id:
+            self.error(404)
+            self.response.out.write('<html><head><title>404 Not Found</title> </head> <body>  <h1>404 Not Found</h1>  The resource could not be found.<br /><br /> </body></html>')
+            return
         if  not int(id) in paradas.nodos:
             self.error(404)
             self.response.out.write('<html><head><title>404 Not Found</title> </head> <body>  <h1>404 Not Found</h1>  The resource could not be found.<br /><br /> </body></html>')
