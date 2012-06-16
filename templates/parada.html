@@ -1,9 +1,18 @@
 {% extends "base.html" %}
-{% block title %}{{name_stop}}{% endblock %}
 
+{% block title %}{{ name_stop }}{% endblock %}
+{% block js_head %}
+    {% if estimaciones %}
+      var now = new Date();
+      var estimaciones = [{% for e in estimaciones %}
+      {% if e[0]<60 %} [ {{ e[0] }} + now.getUTCMinutes(), '{{ e[1] }}'],{% endif %}{% endfor %}];{% else %}
+      var estimaciones = [];
+    {% endif %}
+{% endblock %}
 {% block content %}
       <div class="row">
-        <div class="span4"><!--6 offset1">-->
+
+        <div class="span4"> <!--6 offset1">-->
           <div class="well">
           <h1>{{name_stop}}</h1>
           <h2><small>Parada {{id_stop}}</small></h2>
@@ -21,7 +30,7 @@
               <strong>Ops!</strong> creo que no pasará ningún autobus por aquí en un buen rato...
           </div>
           {% else %}
-          <table class="table table-striped" style="">
+          <table class="table table-striped">
             <thead>
               <tr>
                 <th>Línea</th>
@@ -37,14 +46,16 @@
               {% endfor %}
             </tbody>
           </table> 
-          {% endif%}
+          {% endif %}
         </div>
-        <div class="span4">
-          
+
+        <div class="span4" style="text-align:center">          
           <!-- <canvas id="u22" class="CoolClock:Lev:125:noSeconds"></canvas> -->
           <canvas class="CoolClock:swissRail:128:" id="_coolclock_auto_id_0" width="300" height="300" style="width: 300px; height: 300px; "></canvas>
           <!-- <img src="http://www.poweroverethernet.com/images/articles/fullsize_491_1225960021.jpg" alt="clock"> -->
         </div>
+
+
       </div>
 {% endblock %}
 

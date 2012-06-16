@@ -29,13 +29,13 @@ CoolClock.config = {
 		// There are more skins in moreskins.js
 		// Try making your own skin by copy/pasting one of these and tweaking it
 		swissRail: {
-			outerBorder: { lineWidth: 2, radius:95, color: "black", alpha: 1 },
-			smallIndicator: { lineWidth: 2, startAt: 88, endAt: 92, color: "black", alpha: 1 },
-			largeIndicator: { lineWidth: 4, startAt: 79, endAt: 92, color: "black", alpha: 1 },
-			hourHand: { lineWidth: 8, startAt: -15, endAt: 50, color: "black", alpha: 1 },
-			minuteHand: { lineWidth: 7, startAt: -15, endAt: 75, color: "black", alpha: 1 },
-			secondHand: { lineWidth: 1, startAt: -20, endAt: 85, color: "red", alpha: 1 },
-			secondDecoration: { lineWidth: 1, startAt: 70, radius: 4, fillColor: "red", color: "red", alpha: 1 }
+			outerBorder: { lineWidth: 2, radius:92, color: "black", alpha: 0 },
+			smallIndicator: { lineWidth: 2, startAt: 88, endAt: 92, color: "black", alpha: 0.8 },
+			largeIndicator: { lineWidth: 3, startAt: 82, endAt: 92, color: "black", alpha: 1 },
+			hourHand: { lineWidth: 5, startAt: -3, endAt: 50, color: "black", alpha: 1 },
+			minuteHand: { lineWidth: 4, startAt: -3, endAt: 75, color: "black", alpha: 1 },
+			secondHand: { lineWidth: 2, startAt: 0, endAt: 85, color: "red", alpha: 1 },
+			secondDecoration: { lineWidth: 1, startAt: 70, radius: 4, fillColor: "red", color: "red", alpha: 0 }
 		},
 		chunkySwiss: {
 			outerBorder: { lineWidth: 4, radius:97, color: "black", alpha: 1 },
@@ -238,19 +238,36 @@ CoolClock.prototype = {
 			);
 		}
 
+		//draw estimations
+		if (estimaciones){
+			for (var i=0;i<estimaciones.length;i++) {
+				time =  estimaciones[i][0];
+				// this.drawTextAt(
+				// 	estimaciones[i][1],
+				// 	this.tickAngle(time)
+				// );
+				this.radialLineAtAngle(this.tickAngle(time),{ lineWidth: 3, startAt: 55, endAt: 95, color: "#0088cc", alpha: 1-((time-min)/60) });
+
+			}
+		}
+
 		// Draw the hands
 		if (skin.hourHand)
 			this.radialLineAtAngle(this.tickAngle(((hour%12)*5 + min/12.0)),skin.hourHand);
 
 		if (skin.minuteHand)
-			this.radialLineAtAngle(this.tickAngle((min + sec/60.0)),skin.minuteHand);
+			//this.radialLineAtAngle(this.tickAngle((min + sec/60.0)),skin.minuteHand);
+			this.radialLineAtAngle(this.tickAngle((min)),skin.minuteHand);
 
-		if (this.showSecondHand && skin.secondHand)
-			this.radialLineAtAngle(this.tickAngle(sec),skin.secondHand);
+		
+			
 
-		// Second hand decoration doesn't render right in IE so lets turn it off
-		if (!CoolClock.config.isIE && this.showSecondHand && skin.secondDecoration)
-			this.radialLineAtAngle(this.tickAngle(sec),skin.secondDecoration);
+		// if (this.showSecondHand && skin.secondHand)
+		// 	this.radialLineAtAngle(this.tickAngle(sec),skin.secondHand);
+
+		// // Second hand decoration doesn't render right in IE so lets turn it off
+		// if (!CoolClock.config.isIE && this.showSecondHand && skin.secondDecoration)
+		// 	this.radialLineAtAngle(this.tickAngle(sec),skin.secondDecoration);
 	},
 
 	// Check the time and display the clock
