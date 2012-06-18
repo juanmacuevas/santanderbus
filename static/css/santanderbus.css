@@ -1,7 +1,16 @@
 .parada{
 text-align: center;
 width: 35px;
-padding: 1px 4px;
+padding: 1px 6px;
+font-size: 1.2em;
+color: #FFF;
+border-radius: 3px;
+}
+
+.big-stop{
+text-align: center;
+width: 40px;
+padding: 1px 6px;
 font-size: 1.2em;
 color: #FFF;
 border-radius: 3px;

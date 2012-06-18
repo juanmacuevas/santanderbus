@@ -13,7 +13,7 @@
           <div class="span6"> 
             <ul class="nav nav-tabs nav-stacked">
               {% for l in lineas %}
-              <li><a href="/linea/{{ l[1] }}"><h3>Linea {{ l[1] }} <small> {{ l[0] }}</small></h3></a></li>
+              <li><a href="/linea/{{ l[1] }}"><h3><span class="big-stop" style="background-color: #{{l[2]}}; margin-right: 10px">{{ l[1] }} </span> <small> {{ l[0] }}</small></h3></a></li>
               {% endfor %}
             </ul>
           </div>

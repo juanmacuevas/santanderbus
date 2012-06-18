@@ -85,8 +85,9 @@ class MainHandler(webapp2.RequestHandler):
         #print dom1.toprettyxml()
         lineas = []
         for l in dom1.getElementsByTagName('InfoLinea'):
-            lineas.append([l.getElementsByTagName('nombre')[0].childNodes[0].data,
-                l.getElementsByTagName('label')[0].childNodes[0].data])
+                lin = l.getElementsByTagName('label')[0].childNodes[0].data
+                lineas.append([l.getElementsByTagName('nombre')[0].childNodes[0].data,
+                lin,paradas.colores.get(lin,"000000")])
 
         return lineas
 
@@ -159,11 +160,11 @@ class StopHandler(webapp2.RequestHandler):
                 minutos = int(e.childNodes[0].data)
                 if minutos>=0:
                         linea =l.childNodes[0].data
-                        est.append([minutos,linea,paradas.colores[linea]])
+                        est.append([minutos,linea,paradas.colores.get(linea,"000000")])
 
         est = sorted(est)
         #print "parada "+str(parada)
-        #est=[[4,'5C2',paradas.colores['5C2']],[10,'2',paradas.colores['2']],[16,'1',paradas.colores['1']],[22,'13',paradas.colores['13']]]
+        #est=[[4,'E1',paradas.colores.get("E1","000000")],[10,'2',paradas.colores['2']],[16,'1',paradas.colores['1']],[22,'13',paradas.colores['13']]]
         return est
 
 
