@@ -158,10 +158,12 @@ class StopHandler(webapp2.RequestHandler):
             for e in l.parentNode.getElementsByTagName('minutos'):
                 minutos = int(e.childNodes[0].data)
                 if minutos>=0:
-                    est.append([minutos,l.childNodes[0].data])
+                        linea =l.childNodes[0].data
+                        est.append([minutos,linea,paradas.colores[linea]])
 
         est = sorted(est)
         #print "parada "+str(parada)
+        #est=[[4,'5C2',paradas.colores['5C2']],[10,'2',paradas.colores['2']],[16,'1',paradas.colores['1']],[22,'13',paradas.colores['13']]]
         return est
 
 

@@ -246,7 +246,7 @@ CoolClock.prototype = {
 				// 	estimaciones[i][1],
 				// 	this.tickAngle(time)
 				// );
-				this.radialLineAtAngle(this.tickAngle(time),{ lineWidth: 3, startAt: 55, endAt: 95, color: "#0088cc", alpha: 1-((time-min)/60) });
+				this.radialLineAtAngle(this.tickAngle(time),{ lineWidth: 4, startAt: 55, endAt: 95, color: estimaciones[i][2], alpha: 1 }); //-((time-min)/60)
 
 			}
 		}
