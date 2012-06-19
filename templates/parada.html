@@ -5,7 +5,7 @@
     {% if estimaciones %}
       var now = new Date();
       var estimaciones = [{% for e in estimaciones %}
-      {% if e[0]<60 %} [ {{ e[0] }} + now.getUTCMinutes(), '{{ e[1] }}', '#{{ e[2] }}'],{% endif %}{% endfor %}];{% else %}
+      {% if e[0]<45 %} [ {{ e[0] }} + now.getUTCMinutes(), '{{ e[1] }}', '#{{ e[2] }}'],{% endif %}{% endfor %}];{% else %}
       var estimaciones = [];
     {% endif %}
 {% endblock %}
