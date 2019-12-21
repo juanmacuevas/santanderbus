@@ -5,9 +5,6 @@ import os
 import paradas
 import busapi
 import xmlparser
-import urllib2
-from urllib2 import Request, urlopen, URLError, HTTPError
-from time import time
 from google.appengine.api import memcache
 
 jinja_environment = jinja2.Environment(
@@ -15,184 +12,62 @@ jinja_environment = jinja2.Environment(
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        #self.response.out.write('SantanderBus')
-        t1 = time()
         lineas_render = memcache.get("lineas")
         if lineas_render is not None:
-                t2 = time()
-                tt="<!--"+str(t2-t1)+" -->"
-                self.response.out.write(lineas_render+tt)
-                return       
-        
+            self.response.out.write(lineas_render)
+            return
         content = busapi.requestLineas()
         lineas = xmlparser.parseLineas(content,paradas.colores)
         template_values = {'lineas' :   lineas,}
         template = jinja_environment.get_template('lineas.html')
         lineas_render = template.render(template_values)
         if not memcache.set("lineas", lineas_render):
-                logging.error("Memcache set failed.") 
-        t2 =time()
-        tt="<!--"+str(t2-t1)+" -->"              
-        self.response.out.write(lineas_render+tt)
+            logging.error("Memcache set failed.") 
+        self.response.out.write(lineas_render)
 
 
 class StopHandler(webapp2.RequestHandler):
     def get(self,id):
-    	# n = self.request.get('n')
-        #self.response.out.write("La parada solicitada es "+paradas.nodos[28]['nombre'])
-        if not id:
-            self.error(404)
-            self.response.out.write('<html><head><title>404 Not Found</title> </head> <body>  <h1>404 Not Found</h1>  The resource could not be found.<br /><br /> </body></html>')
+        if not id or not int(id) in paradas.nodos:
+            showError(self)  
             return
-        if  not int(id) in paradas.nodos:
-            self.error(404)
-            self.response.out.write('<html><head><title>404 Not Found</title> </head> <body>  <h1>404 Not Found</h1>  The resource could not be found.<br /><br /> </body></html>')
-            return
-
-        t1 = time()
-        estimaciones = self.getEstimation(id)
-        t2 = time()
+        content = busapi.requestEstimacion(id)
+        estimaciones = xmlparser.parseEstimacion(content,paradas.colores)
         name_stop = paradas.nodos[int(id)]['nombre']
-        
-
         template_values = {
             'id_stop': id ,
             'name_stop': name_stop,
-            'estimaciones' :   estimaciones,
-            'time': str(t2-t1)[:5]     
+            'estimaciones' : estimaciones,
+            'time': ''     
         }
-
         template = jinja_environment.get_template('parada.html')
-
         self.response.out.write(template.render(template_values))
-
-
-    def getEstimation(self,parada):
-
-        url = 'http://www.ayto-santander.es:9001/services/dinamica.asmx'
-
-        data = """<?xml version="1.0" encoding="utf-8"?>
-        <SOAP-ENV:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Body><GetPasoParadaREG xmlns="http://tempuri.org/"><linea>*</linea><parada>%s</parada><medio>3</medio><status>0</status></GetPasoParadaREG></SOAP-ENV:Body></SOAP-ENV:Envelope>"""%(parada)
-        #data2 = urllib.urlencode(data)
-
-        headers = { 
-        'Host': 'www.ayto-santander.es:9001',
-        'Content-Type': 'text/xml; charset=utf-8',
-        'Content-Length': len(data),
-        'SOAPAction': 'http://tempuri.org/GetPasoParadaREG',
-        'Accept': '*/*','Accept-Charset':'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-        'Accept-Encoding': 'gzip,deflate,sdch',
-        'Accept-Language': 'en-GB,en-US;q=0.8,en;q=0.6',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'DNT': 1,
-        'Origin': 'http://www.ayto-santander.es:9001',
-        'Pragma': 'no-cache',
-        'Referer': 'http://www.ayto-santander.es:9001/lineaestimaciones.swf',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.52 Safari/536.5'
-        }
-        req = urllib2.Request(url, data, headers)
-
-        response = urllib2.urlopen(req)
-        the_page = response.read()
-
-
-        dom1 = parseString(the_page)
-        #print dom1.toprettyxml()
-        est = []
-        for l in dom1.getElementsByTagName('linea'):
-            for e in l.parentNode.getElementsByTagName('minutos'):
-                minutos = int(e.childNodes[0].data)
-                if minutos>=0:
-                        linea =l.childNodes[0].data
-                        est.append([minutos,linea,paradas.colores.get(linea,"000000")])
-
-        est = sorted(est)
-        #print "parada "+str(parada)
-        #est=[[4,'E1',paradas.colores.get("E1","000000")],[10,'2',paradas.colores['2']],[16,'1',paradas.colores['1']],[22,'13',paradas.colores['13']]]
-        return est
-
 
 
 class LineHandler(webapp2.RequestHandler):
     def get(self,id):
-        t1 = time()
         linea_render = memcache.get("linea/"+id)
         if linea_render is not None:
-                t2 = time()
-                tt="<!--"+str(t2-t1)+" -->"
-                self.response.out.write(linea_render+tt)
-                return   
-        
-        rutas = self.getLine(id)
-        if  not rutas:
-            self.error(404)
-            self.response.out.write('<html><head><title>404 Not Found</title> </head> <body>  <h1>404 Not Found</h1>  The resource could not be found.<br /><br /> </body></html>')
+                self.response.out.write(linea_render)
+                return
+        content = busapi.requestLinea(id)
+        if not content:
+            showError(self)
             return
-
-        template_values = {
-            'rutas':rutas  ,
-            'linea' : id 
-        }
-
+        rutas = xmlparser.parseLinea(content)
+        if  not rutas:
+            showError(self)
+            return
+        template_values = {'rutas':rutas, 'linea' : id }
         template = jinja_environment.get_template('linea.html')
         linea_render = template.render(template_values)
         if not memcache.set("linea/"+id, linea_render):
                 logging.error("Memcache set failed.") 
-        t2 =time()
-        tt="<!--"+str(t2-t1)+" -->"              
-        self.response.out.write(linea_render+tt)
+        self.response.out.write(linea_render)
 
-
-    def getLine(self,linea):
-
-        url = 'http://www.ayto-santander.es:9001/services/estructura.asmx'
-
-        data = """<?xml version="1.0" encoding="utf-8"?>
-        <SOAP-ENV:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Body><GetRutasSublinea xmlns="http://tempuri.org/"><label>%s</label><sublinea>1</sublinea></GetRutasSublinea></SOAP-ENV:Body></SOAP-ENV:Envelope>"""%(linea)
-        #data2 = urllib.urlencode(data)
-
-        headers = { 
-        'Host': 'www.ayto-santander.es:9001',
-        'Content-Type': 'text/xml; charset=utf-8',
-        'Content-Length': len(data),
-        'SOAPAction': 'http://tempuri.org/GetRutasSublinea',
-        'Accept': '*/*','Accept-Charset':'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-        'Accept-Encoding': 'gzip,deflate,sdch',
-        'Accept-Language': 'en-GB,en-US;q=0.8,en;q=0.6',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'DNT': 1,
-        'Origin': 'http://www.ayto-santander.es:9001',
-        'Pragma': 'no-cache',
-        'Referer': 'http://www.ayto-santander.es:9001/lineaestimaciones.swf',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.52 Safari/536.5'
-        }
-        req = urllib2.Request(url, data, headers)
-        try:
-                response = urllib2.urlopen(req)
-        except HTTPError, e:
-                self.error(404)
-                self.response.out.write('<html><head><title>404 Not Found</title> </head> <body>  <h1>404 Not Found</h1>  The resource could not be found.<br /><br /> </body></html>')
-                return
-        the_page = response.read()
-
-
-
-        dom1 = parseString(the_page)
-        rutas = []
-        for ir in dom1.getElementsByTagName('InfoRuta'):
-                paradas = []    
-                nombreRuta =  ir.getElementsByTagName('nombre')[0].childNodes[0].data
-                #print nombreRuta
-                for ins in ir.getElementsByTagName('InfoNodoSeccion'):
-                        nodo = ins.getElementsByTagName('nodo')[0].childNodes[0].data
-                        nombreParada = ins.getElementsByTagName('nombre')[0].childNodes[0].data
-                        paradas.append([nodo,nombreParada])             
-                rutas.append([nombreRuta,paradas])
-        return rutas
-
-
+def showError(handler):
+    handler.error(404)
+    handler.response.out.write('<html><head><title>404 Not Found</title> </head> <body>  <h1>404 Not Found</h1>  The resource could not be found.<br /><br /> </body></html>')
 
 app = webapp2.WSGIApplication([('/parada/(\d*)',StopHandler),('/linea/(.*)', LineHandler),('/', MainHandler)],
                               debug=True)
