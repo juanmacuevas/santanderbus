@@ -8,10 +8,14 @@ border-radius: 3px;
 }
 
 .big-stop{
+
+display: inline-block;
+width: 2em;
+height: 2em;
+line-height: 2em;
 text-align: center;
-width: 40px;
 padding: 1px 6px;
 font-size: 1.2em;
 color: #FFF;
-border-radius: 3px;
+border-radius: 10px;
 }
