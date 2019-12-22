@@ -1,16 +1,26 @@
 #!/usr/bin/env python
 from xml.dom.minidom import parseString
+import re
+
+def atoi(text):
+    return int(text) if text.isdigit() else text
+
+
+def natural_keys(text):
+    return [ atoi(c) for c in re.split(r'(\d+)', text) ]
+
 
 def parseLineas(content,colores):
     xml_doc = parseString(content)
     lineas = []
     for l in xml_doc.getElementsByTagName('InfoLinea'):
-        label = l.getElementsByTagName('label')[0].childNodes[0].data
-        nombre = l.getElementsByTagName('nombre')[0].childNodes[0].data
+        label = l.getElementsByTagName('label')[0].childNodes[0].data#.encode('utf-8')
+        nombre = l.getElementsByTagName('nombre')[0].childNodes[0].data#.encode('utf-8')
         color = colores.get(label,"000000")
         linea = [nombre,label,color]    
         lineas.append(linea)
-    return lineas
+
+    return sorted(lineas,key=lambda x:natural_keys(x[1]))
 
 def parseLinea(content):
     xml_doc = parseString(content)

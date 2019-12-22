@@ -33,7 +33,7 @@ class StopHandler(webapp2.RequestHandler):
             return
         content = busapi.requestEstimacion(id)
         estimaciones = xmlparser.parseEstimacion(content,paradas.colores)
-        name_stop = paradas.nodos[int(id)]['nombre']
+        name_stop = paradas.nodos[int(id)].decode('utf8')
         template_values = {
             'id_stop': id ,
             'name_stop': name_stop,
